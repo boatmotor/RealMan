@@ -13,7 +13,7 @@ $bot = new \LINE\LINEBot($httpClient, ['channelSecret' => $channelSecret]);
 
 $testtext = 'temp = 26.66';
 
-$textMessageBuilder = new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($testtext);
+$textMessageBuilder = new \LINE\LINEBot\MessageBuilder\TextMessageBuilder('testtext');
 $response = $bot->pushMessage($idPush, $textMessageBuilder);
 
 echo $response->getHTTPStatus() . ' ' . $response->getRawBody();
