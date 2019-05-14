@@ -17,11 +17,12 @@ $textMessageBuilder = new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($testt
 $response = $bot->pushMessage($idPush, $textMessageBuilder);
 
 echo $response->getHTTPStatus() . ' ' . $response->getRawBody();
+/*
 <br></br>
 $textMessageBuilder = new \LINE\LINEBot\MessageBuilder\TextMessageBuilder('U ID = ');
 $response = $bot->pushMessage($idPush, $textMessageBuilder);
 require "webhooks.php";
 
-
+*/
 
 
