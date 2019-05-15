@@ -1,5 +1,7 @@
 <?php
 
+require "vendor/autoload.php";
+
 // URL API LINE
 $API_URL = 'https://api.line.me/v2/bot/message';
 // ใส่ Channel access token (long-lived)
