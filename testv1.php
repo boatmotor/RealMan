@@ -1,51 +1,21 @@
-<?php // callback.php
+<?php
 
 require "vendor/autoload.php";
-require_once('vendor/linecorp/line-bot-sdk/line-bot-sdk-tiny/LINEBotTiny.php');
 
 $access_token = 'KsFGCHfOsNiMdqlFB7RvrPAWA/fvzAWAIsRRxpd5h6kHiNXP4L1MIAImBKTKkabTUIVbt4CTzWgSuXHQEtgim60gPNkYiW42RYtRDatHVvWHhn3zsmHeVOTeTtyMhdLbDuOGmoeSEZeg8/Z2HhEvFQdB04t89/1O/w1cDnyilFU=';
+$channelSecret = '7d2bae44dd66d02dc1012ef87d3df6ed';
+$idPush = 'U3d092e90274aba00840fe94180cd8906';
 
-// Get POST body content
-$content = file_get_contents('php://input');
-// Parse JSON
-$events = json_decode($content, true);
-// Validate parsed JSON data
-if (!is_null($events['events'])) {
-	// Loop through each event
-	foreach ($events['events'] as $event) {
-		// Reply only when message sent is in 'text' format
-		if ($event['type'] == 'message' && $event['message']['type'] == 'text') {
-			// Get text sent
-			$text = $event['source']['userId'];
-			// Get replyToken
-			$replyToken = $event['replyToken'];
+$httpClient = new \LINE\LINEBot\HTTPClient\CurlHTTPClient($access_token);
+$bot = new \LINE\LINEBot($httpClient, ['channelSecret' => $channelSecret]);
 
-			// Build message to reply back
-			$messages = [
-				'type' => 'text',
-				'text' => $text
-			];
 
-			// Make a POST Request to Messaging API to reply to sender
-			$url = 'https://api.line.me/v2/bot/message/reply';
-			$data = [
-				'replyToken' => $replyToken,
-				'messages' => [$messages],
-			];
-			$post = json_encode($data);
-			$headers = array('Content-Type: application/json', 'Authorization: Bearer ' . $access_token);
+$textMessageBuilder = new \LINE\LINEBot\MessageBuilder\TextMessageBuilder('text number 2');
+$response = $bot->pushMessage($idPush, $textMessageBuilder);
 
-			$ch = curl_init($url);
-			curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-			curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
-			curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-			curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
-			$result = curl_exec($ch);
-			curl_close($ch);
+echo $response->getHTTPStatus() . ' ' . $response->getRawBody();
 
-			echo $result . "\r\n";
-		}
-	}
-}
-echo "OK";
+$text2 = new \LINE\LINEBot\MessageBuilder\text2('text2');
+$response = $bot->pushMessage($idPush, $text2);
+
+echo $response->getHTTPStatus() . ' ' . $response->getRawBody();
