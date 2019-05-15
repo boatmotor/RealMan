@@ -13,7 +13,7 @@ $bot = new \LINE\LINEBot($httpClient, ['channelSecret' => $channelSecret]);
 $textMessageBuilder = new \LINE\LINEBot\MessageBuilder\TextMessageBuilder('text number 2');
 $response = $bot->pushMessage($idPush, $textMessageBuilder);
 
-echo $response->getHTTPStatus() . ' ' . $response->getRawBody();
+// echo $response->getHTTPStatus() . ' ' . $response->getRawBody();
 
 $text2 = new \LINE\LINEBot\MessageBuilder\text2('text2');
 $response = $bot->pushMessage($idPush, $text2);
