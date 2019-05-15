@@ -11,16 +11,6 @@ $idPush = 'U3d092e90274aba00840fe94180cd8906';
 $httpClient = new \LINE\LINEBot\HTTPClient\CurlHTTPClient($access_token);
 $bot = new \LINE\LINEBot($httpClient, ['channelSecret' => $channelSecret]);
 
-$test = 'temp = 25.66' ;
-$testtext = [
-    'type' => 'text',
-    'text' => $test
-];
-
-$textMessageBuilder = new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($testtext);
-$response = $bot->pushMessage($idPush, $textMessageBuilder);
-
-echo $response->getHTTPStatus() . ' ' . $response->getRawBody();
 
 $textMessageBuilder = new \LINE\LINEBot\MessageBuilder\TextMessageBuilder('text number 2');
 $response = $bot->pushMessage($idPush, $textMessageBuilder);
