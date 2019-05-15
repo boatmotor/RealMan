@@ -1,22 +1,63 @@
 <?php
 
-require "vendor/autoload.php";
+// URL API LINE
+$API_URL = 'https://api.line.me/v2/bot/message';
+// ใส่ Channel access token (long-lived)
+$ACCESS_TOKEN = 'KsFGCHfOsNiMdqlFB7RvrPAWA/fvzAWAIsRRxpd5h6kHiNXP4L1MIAImBKTKkabTUIVbt4CTzWgSuXHQEtgim60gPNkYiW42RYtRDatHVvWHhn3zsmHeVOTeTtyMhdLbDuOGmoeSEZeg8/Z2HhEvFQdB04t89/1O/w1cDnyilFU=';
+// ใส่ Channel Secret
+$CHANNEL_SECRET = '7d2bae44dd66d02dc1012ef87d3df6ed';
 
-$access_token = 'KsFGCHfOsNiMdqlFB7RvrPAWA/fvzAWAIsRRxpd5h6kHiNXP4L1MIAImBKTKkabTUIVbt4CTzWgSuXHQEtgim60gPNkYiW42RYtRDatHVvWHhn3zsmHeVOTeTtyMhdLbDuOGmoeSEZeg8/Z2HhEvFQdB04t89/1O/w1cDnyilFU=';
-$channelSecret = '7d2bae44dd66d02dc1012ef87d3df6ed';
-$idPush = 'U3d092e90274aba00840fe94180cd8906';
+// Set HEADER
+$POST_HEADER = array('Content-Type: application/json', 'Authorization: Bearer ' . $ACCESS_TOKEN);
+// Get request content
+$request = file_get_contents('php://input');
+// Decode JSON to Array
+$request_array = json_decode($request, true);
 
-$httpClient = new \LINE\LINEBot\HTTPClient\CurlHTTPClient($access_token);
-$bot = new \LINE\LINEBot($httpClient, ['channelSecret' => $channelSecret]);
+function send_reply_message($url, $post_header, $post_body)
+{
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $post_header);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $post_body);
+    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+    $result = curl_exec($ch);
+    curl_close($ch);
+
+    return $result;
+}
+
+function send_reply_message($url, $post_header, $post_body)
+{
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $post_header);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $post_body);
+    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+    $result = curl_exec($ch);
+    curl_close($ch);
+
+    return $result;
+}
 
 
-$textMessageBuilder = new \LINE\LINEBot\MessageBuilder\TextMessageBuilder('text number 2');
-$response = $bot->pushMessage($idPush, $textMessageBuilder);
-
-// echo $response->getHTTPStatus() . ' ' . $response->getRawBody();
-
-$text2 = new \LINE\LINEBot\MessageBuilder\text2('text2');
-$res = $bot->pushMessage($idPush, $text2);
-echo $response->getHTTPStatus() . ' ' . $res->getRawBody();
-
-echo $response->getHTTPStatus() . ' ' . $response->getRawBody();
+if ( sizeof($request_array['events']) > 0 ) {
+      foreach ($request_array['events'] as $event) {
+      
+      $reply_message = '';
+      $reply_token = $event['replyToken'];
+      $data = [
+         'replyToken' => $reply_token,
+         'messages' => [
+            ['type' => 'text', 
+             'text' => json_encode($request_array)]
+         ]
+      ];
+      $post_body = json_encode($data, JSON_UNESCAPED_UNICODE);
+      $send_result = send_reply_message($API_URL.'/reply', $POST_HEADER, $post_body);
+      echo "Result: ".$send_result."\r\n";
+   }
+}
+echo "OK";
