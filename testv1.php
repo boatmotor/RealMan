@@ -16,6 +16,7 @@ $response = $bot->pushMessage($idPush, $textMessageBuilder);
 // echo $response->getHTTPStatus() . ' ' . $response->getRawBody();
 
 $text2 = new \LINE\LINEBot\MessageBuilder\text2('text2');
-$response = $bot->pushMessage($idPush, $text2);
+$res = $bot->pushMessage($idPush, $text2);
+echo $response->getHTTPStatus() . ' ' . $res->getRawBody();
 
 echo $response->getHTTPStatus() . ' ' . $response->getRawBody();
